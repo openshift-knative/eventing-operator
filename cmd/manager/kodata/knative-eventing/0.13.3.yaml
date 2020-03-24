@@ -1,4 +1,3 @@
-
 ---
 # eventing-core.yaml
 # Copyright 2018 The Knative Authors
@@ -2688,7 +2687,7 @@ metadata:
     eventing.knative.dev/release: "v0.13.3"
 rules:
 - apiGroups: ["eventing.knative.dev", "messaging.knative.dev", "sources.eventing.knative.dev",
-    "sources.knative.dev", "flows.knative.dev"]
+              "sources.knative.dev", "flows.knative.dev"]
   resources: ["*"]
   verbs: ["create", "update", "patch", "delete"]
 ---
@@ -2701,7 +2700,7 @@ metadata:
     eventing.knative.dev/release: "v0.13.3"
 rules:
 - apiGroups: ["eventing.knative.dev", "messaging.knative.dev", "sources.eventing.knative.dev",
-    "sources.knative.dev", flows.knative.dev]
+              "sources.knative.dev", flows.knative.dev]
   resources: ["*"]
   verbs: ["get", "list", "watch"]
 
