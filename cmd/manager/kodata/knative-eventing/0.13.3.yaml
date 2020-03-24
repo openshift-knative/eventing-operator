@@ -325,29 +325,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sources-controller
-  namespace: knative-eventing
-  labels:
-    eventing.knative.dev/release: "v0.13.3"
-spec:
-  replicas: 0
-  selector:
-    matchLabels:
-      app: sources-controller
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"
-      labels:
-        app: sources-controller
-    spec:
-      containers:
-      - name: controller
-        image: knative.dev/eventing/cmd/sources_controller
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: eventing-webhook
   namespace: knative-eventing
   labels:
