@@ -1,41 +1,11 @@
-
 ---
-# eventing-core.yaml
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-eventing
   labels:
     eventing.knative.dev/release: "v0.13.3"
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -118,22 +88,7 @@ roleRef:
   kind: ClusterRole
   name: channelable-manipulator
   apiGroup: rbac.authorization.k8s.io
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -186,58 +141,26 @@ roleRef:
   kind: ClusterRole
   name: podspecable-binding
   apiGroup: rbac.authorization.k8s.io
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-br-defaults
   namespace: knative-eventing
 data:
-  # Configuration for defaulting channels that do not specify CRD implementations.
   default-br-config: |
     clusterDefault:
       apiVersion: v1
       kind: ConfigMap
       name: config-br-default-channel
       namespace: knative-eventing
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: default-ch-webhook
   namespace: knative-eventing
 data:
-  # Configuration for defaulting channels that do not specify CRD implementations.
   default-ch-config: |
     clusterDefault:
       apiVersion: messaging.knative.dev/v1alpha1
@@ -246,22 +169,7 @@ data:
       some-namespace:
         apiVersion: messaging.knative.dev/v1alpha1
         kind: InMemoryChannel
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -271,22 +179,7 @@ data:
   channelTemplateSpec: |
     apiVersion: messaging.knative.dev/v1alpha1
     kind: InMemoryChannel
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -295,68 +188,17 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
 data:
-  # An inactive but valid configuration follows; see example.
   resourceLock: "leases"
   leaseDuration: "15s"
   renewDeadline: "10s"
   retryPeriod: "2s"
   _example: |
-    ################################
-    #                              #
-    #    EXAMPLE CONFIGURATION     #
-    #                              #
-    ################################
-
-    # This block is not actually functional configuration,
-    # but serves to illustrate the available configuration
-    # options and document them in a way that is accessible
-    # to users that `kubectl edit` this config map.
-    #
-    # These sample configuration options may be copied out of
-    # this example block and unindented to be in the data block
-    # to actually change the configuration.
-
-    # resourceLock controls which API resource is used as the basis for the
-    # leader election lock. Valid values are:
-    #
-    # - leases -> use the coordination API
-    # - configmaps -> use configmaps
-    # - endpoints -> use endpoints
     resourceLock: "leases"
-
-    # leaseDuration is how long non-leaders will wait to try to acquire the
-    # lock; 15 seconds is the value used by core kubernetes controllers.
     leaseDuration: "15s"
-    # renewDeadline is how long a leader will try to renew the lease before
-    # giving up; 10 seconds is the value used by core kubernetes controllers.
     renewDeadline: "10s"
-    # retryPeriod is how long the leader election client waits between tries of
-    # actions; 2 seconds is the value used by core kuberntes controllers.
     retryPeriod: "2s"
-    # enabledComponents is a comma-delimited list of component names for which
-    # leader election is enabled. Valid values are:
-    #
-    # - controller
-    # - broker-controller
-    # - inmemorychannel-dispatcher
-    # - inmemorychannel-controller
     enabledComponents: "controller"
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -367,7 +209,6 @@ metadata:
     knative.dev/config-propagation: original
     knative.dev/config-category: eventing
 data:
-  # Common configuration for all Knative codebase
   zap-logger-config: |
     {
       "level": "info",
@@ -389,26 +230,9 @@ data:
         "callerEncoder": ""
       }
     }
-  # Log level overrides
-  # For all components changes are be picked up immediately.
   loglevel.controller: "info"
   loglevel.webhook: "info"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -420,64 +244,12 @@ metadata:
     knative.dev/config-category: eventing
 data:
   _example: |
-    ################################
-    #                              #
-    #    EXAMPLE CONFIGURATION     #
-    #                              #
-    ################################
-
-    # This block is not actually functional configuration,
-    # but serves to illustrate the available configuration
-    # options and document them in a way that is accessible
-    # to users that `kubectl edit` this config map.
-    #
-    # These sample configuration options may be copied out of
-    # this example block and unindented to be in the data block
-    # to actually change the configuration.
-
-    # metrics.backend-destination field specifies the system metrics destination.
-    # It supports either prometheus (the default) or stackdriver.
-    # Note: Using stackdriver will incur additional charges
     metrics.backend-destination: prometheus
-
-    # metrics.request-metrics-backend-destination specifies the request metrics
-    # destination. If non-empty, it enables queue proxy to send request metrics.
-    # Currently supported values: prometheus, stackdriver.
     metrics.request-metrics-backend-destination: prometheus
-
-    # metrics.stackdriver-project-id field specifies the stackdriver project ID. This
-    # field is optional. When running on GCE, application default credentials will be
-    # used if this field is not provided.
     metrics.stackdriver-project-id: "<your stackdriver project id>"
-
-    # metrics.allow-stackdriver-custom-metrics indicates whether it is allowed to send metrics to
-    # Stackdriver using "global" resource type and custom metric type if the
-    # metrics are not supported by "knative_broker", "knative_trigger", and "knative_source" resource types.
-    # Setting this flag to "true" could cause extra Stackdriver charge.
-    # If metrics.backend-destination is not Stackdriver, this is ignored.
     metrics.allow-stackdriver-custom-metrics: "false"
-
-    # profiling.enable indicates whether it is allowed to retrieve runtime profiling data from
-    # the pods via an HTTP server in the format expected by the pprof visualization tool. When
-    # enabled, the Knative Eventing pods expose the profiling data on an alternate HTTP port 8008.
-    # The HTTP context root for profiling is then /debug/pprof/.
     profiling.enable: "false"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -489,54 +261,12 @@ metadata:
     knative.dev/config-category: eventing
 data:
   _example: |
-    ################################
-    #                              #
-    #    EXAMPLE CONFIGURATION     #
-    #                              #
-    ################################
-    # This block is not actually functional configuration,
-    # but serves to illustrate the available configuration
-    # options and document them in a way that is accessible
-    # to users that `kubectl edit` this config map.
-    #
-    # These sample configuration options may be copied out of
-    # this example block and unindented to be in the data block
-    # to actually change the configuration.
-    #
-    # This may be "zipkin" or "stackdriver", the default is "none"
     backend: "none"
-
-    # URL to zipkin collector where traces are sent.
-    # This must be specified when backend is "zipkin"
     zipkin-endpoint: "http://zipkin.istio-system.svc.cluster.local:9411/api/v2/spans"
-
-    # The GCP project into which stackdriver metrics will be written
-    # when backend is "stackdriver".  If unspecified, the project-id
-    # is read from GCP metadata when running on GCP.
     stackdriver-project-id: "my-project"
-
-    # Enable zipkin debug mode. This allows all spans to be sent to the server
-    # bypassing sampling.
     debug: "false"
-
-    # Percentage (0-1) of requests to trace
     sample-rate: "0.1"
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -559,7 +289,7 @@ spec:
       containers:
       - name: eventing-controller
         terminationMessagePolicy: FallbackToLogsOnError
-        image: gcr.io/knative-releases/knative.dev/eventing/cmd/controller@sha256:58e64d346c696096441714abb3cd2792ea3498db1325ed5ceb5551ef544d4df7
+        image: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-controller
         resources:
           requests:
             cpu: 100m
@@ -577,13 +307,13 @@ spec:
           value: knative.dev/eventing
         - # Legacy CronJobSource
           name: CRONJOB_RA_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/cronjob_receive_adapter@sha256:aa0982d31b9c20d6ab107cd3cf0c9a7ec2015826895285710d097d7f186aa978
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-cronjob-receive-adapter
         - # PingSource
           name: PING_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/ping@sha256:a987395ee70a04ccf259bcc38509c6ba6510ea1c8d2d92ddc58a0fcaaf965994
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-ping
         - # APIServerSource
           name: APISERVER_RA_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/apiserver_receive_adapter@sha256:e8ce974ce451b5e91328d568426971c8d2322dc311449e0448a153555ccb2582
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-apiserver-receive-adapter
         securityContext:
           allowPrivilegeEscalation: false
         ports:
@@ -591,64 +321,7 @@ spec:
           containerPort: 9090
         - name: profiling
           containerPort: 8008
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# TODO(n3wscott): DELETE THIS FILE AFTER v0.13 CUTS
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: sources-controller
-  namespace: knative-eventing
-  labels:
-    eventing.knative.dev/release: "v0.13.3"
-spec:
-  replicas: 0
-  selector:
-    matchLabels:
-      app: sources-controller
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"
-      labels:
-        app: sources-controller
-    spec:
-      containers:
-      - name: controller
-        # This is the Go import path for the binary that is containerized
-        # and substituted here.
-        image: knative.dev/eventing/cmd/sources_controller
-
----
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -670,16 +343,12 @@ spec:
       containers:
       - name: eventing-webhook
         terminationMessagePolicy: FallbackToLogsOnError
-        # This is the Go import path for the binary that is containerized
-        # and substituted here.
-        image: gcr.io/knative-releases/knative.dev/eventing/cmd/webhook@sha256:d1e5538a8a0ebda46495398b1d268c81567a216e974edd8871364cd2543a3e07
+        image: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-webhook
         resources:
           requests:
-            # taken from serving.
             cpu: 20m
             memory: 20Mi
           limits:
-            # taken from serving.
             cpu: 200m
             memory: 200Mi
         env:
@@ -693,13 +362,6 @@ spec:
           value: knative.dev/eventing
         - name: WEBHOOK_NAME
           value: eventing-webhook
-          # SINK_BINDING_SELECTION_MODE specifies the NamespaceSelector and ObjectSelector
-          # for the sinkbinding webhook.
-          # If `inclusion` is selected, namespaces/objects labled as `bindings.knative.dev/include:true`
-          # will be considered by the sinkbinding webhook;
-          # If `exclusion` is selected, namespaces/objects labled as `bindings.knative.dev/exclude:true`
-          # will NOT be considered by the sinkbinding webhook.
-          # The default is `exclusion`.
         - name: SINK_BINDING_SELECTION_MODE
           value: "exclusion"
         securityContext:
@@ -727,22 +389,7 @@ spec:
     targetPort: 8443
   selector:
     role: eventing-webhook
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -753,7 +400,6 @@ metadata:
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
-    # TODO add schemas and descriptions
     registry.knative.dev/eventTypes: |
       [
         { "type": "dev.knative.apiserver.resource.add" },
@@ -781,10 +427,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flesh out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   conversion:
     strategy: Webhook
@@ -812,22 +454,7 @@ spec:
   - name: v1alpha2
     served: false
     storage: false
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -972,22 +599,7 @@ spec:
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1128,21 +740,7 @@ spec:
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1167,10 +765,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flesh out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   additionalPrinterColumns:
   - name: Type
@@ -1201,22 +795,7 @@ spec:
   - name: v1beta1
     served: true
     storage: false
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1227,7 +806,6 @@ metadata:
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
-    # TODO add schemas and descriptions
     registry.knative.dev/eventTypes: |
       [
         { "type": "dev.knative.apiserver.resource.add" },
@@ -1377,22 +955,7 @@ spec:
   - name: v1alpha1
     served: true
     storage: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1492,8 +1055,6 @@ spec:
               items:
                 properties:
                   lastTransitionTime:
-                    # we use a string in the stored object but a wrapper object
-                    # at runtime.
                     type: string
                   message:
                     type: string
@@ -1517,22 +1078,7 @@ spec:
   - name: v1alpha1
     served: true
     storage: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1542,7 +1088,6 @@ metadata:
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
-    # TODO add schemas and descriptions
     registry.knative.dev/eventTypes: |
       [
         { "type": "dev.knative.cronjob.event" }
@@ -1649,8 +1194,6 @@ spec:
               items:
                 properties:
                   lastTransitionTime:
-                    # we use a string in the stored object but a wrapper object
-                    # at runtime.
                     type: string
                   message:
                     type: string
@@ -1674,22 +1217,7 @@ spec:
   - name: v1alpha1
     served: true
     storage: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1725,21 +1253,7 @@ spec:
   - name: Reason
     type: string
     JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1754,10 +1268,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   names:
     kind: Parallel
@@ -1797,22 +1307,7 @@ spec:
   - name: v1beta1
     served: true
     storage: false
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1822,7 +1317,6 @@ metadata:
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
-    # TODO add schemas and descriptions
     registry.knative.dev/eventTypes: |
       [
         { "type": "dev.knative.sources.ping" }
@@ -1845,10 +1339,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flesh out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   conversion:
     strategy: Webhook
@@ -1876,21 +1366,7 @@ spec:
   - name: v1alpha2
     served: true
     storage: false
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1905,10 +1381,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   names:
     kind: Sequence
@@ -1948,22 +1420,7 @@ spec:
   - name: v1beta1
     served: true
     storage: false
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1992,10 +1449,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flesh out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   conversion:
     strategy: Webhook
@@ -2023,21 +1476,7 @@ spec:
   - name: v1alpha2
     served: true
     storage: false
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -2063,11 +1502,6 @@ spec:
     status: {}
   conversion:
     strategy: None
-    #    strategy: Webhook
-    #    webhookClientConfig:
-    #      service:
-    #        name: eventing-webhook
-    #        namespace: knative-eventing
   additionalPrinterColumns:
   - name: Ready
     type: string
@@ -2179,22 +1613,7 @@ spec:
   - name: v1beta1
     served: true
     storage: false
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -2356,23 +1775,7 @@ spec:
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Use this aggregated ClusterRole when you need readonly access to "Addressables"
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2392,7 +1795,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - ""
@@ -2410,7 +1812,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - serving.knative.dev
@@ -2431,7 +1832,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - messaging.knative.dev
@@ -2450,7 +1850,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - eventing.knative.dev
@@ -2469,7 +1868,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - messaging.knative.dev
@@ -2490,7 +1888,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - flows.knative.dev
@@ -2503,22 +1900,7 @@ rules:
   - get
   - list
   - watch
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2575,23 +1957,7 @@ rules:
   - "get"
   - "list"
   - "watch"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Use this aggregated ClusterRole when you need read and update permissions on "Channelables".
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2603,22 +1969,7 @@ aggregationRule:
   - matchLabels:
       duck.knative.dev/channelable: "true"
 rules: [] # Rules are automatically filled in by the controller manager.
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -2688,7 +2039,7 @@ metadata:
     eventing.knative.dev/release: "v0.13.3"
 rules:
 - apiGroups: ["eventing.knative.dev", "messaging.knative.dev", "sources.eventing.knative.dev",
-    "sources.knative.dev", "flows.knative.dev"]
+              "sources.knative.dev", "flows.knative.dev"]
   resources: ["*"]
   verbs: ["create", "update", "patch", "delete"]
 ---
@@ -2701,25 +2052,10 @@ metadata:
     eventing.knative.dev/release: "v0.13.3"
 rules:
 - apiGroups: ["eventing.knative.dev", "messaging.knative.dev", "sources.eventing.knative.dev",
-    "sources.knative.dev", flows.knative.dev]
+              "sources.knative.dev", flows.knative.dev]
   resources: ["*"]
   verbs: ["get", "list", "watch"]
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2823,23 +2159,7 @@ rules:
   - "get"
   - "list"
   - "watch"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Use this aggregated ClusterRole when you need readonly access to "Addressables"
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2859,7 +2179,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "podspecable-binding role.
 rules:
 - # To patch the subjects of our bindings
   apiGroups:
@@ -2881,23 +2200,7 @@ rules:
   - "list"
   - "watch"
   - "patch"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Use this aggregated ClusterRole when you need to read "Sources".
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -2917,7 +2220,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/source: "true"
-# Do not use this role directly. These rules will be added to the "source-observer" role.
 rules:
 - apiGroups:
   - sources.knative.dev
@@ -2938,22 +2240,7 @@ rules:
   - get
   - list
   - watch
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3037,22 +2324,7 @@ rules:
   - subjectaccessreviews
   verbs:
   - create
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3108,7 +2380,6 @@ rules:
   - "patch"
   - "watch"
 - # For running the SinkBinding reconciler.
-  # TODO(#2312): Remove this after v0.13.
   apiGroups:
   - "sources.eventing.knative.dev"
   resources:
@@ -3125,26 +2396,10 @@ rules:
   - "sinkbindings/finalizers"
   verbs: *everything
 - # Necessary for conversion webhook. These are copied from the serving
-  # TODO: Do we really need all these permissions?
   apiGroups: ["apiextensions.k8s.io"]
   resources: ["customresourcedefinitions"]
   verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
@@ -3165,22 +2420,7 @@ webhooks:
     matchExpressions:
     - key: eventing.knative.dev/release
       operator: Exists
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -3197,22 +2437,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   name: webhook.eventing.knative.dev
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -3229,22 +2454,7 @@ webhooks:
   failurePolicy: Fail
   sideEffects: None
   name: legacysinkbindings.webhook.sources.knative.dev
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
@@ -3261,22 +2471,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   name: validation.webhook.eventing.knative.dev
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: Secret
 metadata:
@@ -3284,23 +2479,7 @@ metadata:
   namespace: knative-eventing
   labels:
     eventing.knative.dev/release: "v0.13.3"
-# The data is populated at install time.
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -3317,24 +2496,8 @@ webhooks:
   failurePolicy: Fail
   sideEffects: None
   name: sinkbindings.webhook.sources.knative.dev
-
 ---
 ---
-# channel-broker.yaml
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -3349,22 +2512,7 @@ roleRef:
   kind: ClusterRole
   name: knative-eventing-channel-broker-controller
   apiGroup: rbac.authorization.k8s.io
-
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -3385,9 +2533,9 @@ spec:
     spec:
       serviceAccountName: eventing-controller
       containers:
-      - name: eventing-controller
+      - name: broker-controller
         terminationMessagePolicy: FallbackToLogsOnError
-        image: gcr.io/knative-releases/knative.dev/eventing/cmd/channel_broker@sha256:853e0d194223da4356af7c9a17c79afa0ef96b93fd956d5febb2b1f2be78c717
+        image: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-channel-broker
         resources:
           requests:
             cpu: 100m
@@ -3405,11 +2553,11 @@ spec:
           value: knative.dev/eventing
         - # Broker
           name: BROKER_INGRESS_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/broker/ingress@sha256:d080653ce0792a304ba388dcb1e360dc427d8556503e0a2603da26d261ac21e4
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-ingress
         - name: BROKER_INGRESS_SERVICE_ACCOUNT
           value: eventing-broker-ingress
         - name: BROKER_FILTER_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/broker/filter@sha256:8858a3144b1911090b70ca7e12da43963fedb74fdc98c76b4cfbbbaa3ee3fd56
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-filter
         - name: BROKER_FILTER_SERVICE_ACCOUNT
           value: eventing-broker-filter
         - name: BROKER_IMAGE_PULL_SECRET_NAME
@@ -3421,22 +2569,7 @@ spec:
           containerPort: 9090
         - name: profiling
           containerPort: 8008
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3484,22 +2617,7 @@ spec:
             originalNamespace:
               type: string
               description: "The namespace where original ConfigMaps exist in."
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3545,24 +2663,8 @@ rules:
   - "delete"
   - "patch"
   - "watch"
-
 ---
 ---
-# in-memory-channel.yaml
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3573,22 +2675,7 @@ metadata:
 data:
   MaxIdleConnections: "1000"
   MaxIdleConnectionsPerHost: "100"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3596,7 +2683,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/addressable: "true"
-# Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
 - apiGroups:
   - messaging.knative.dev
@@ -3607,22 +2693,7 @@ rules:
   - get
   - list
   - watch
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3630,7 +2701,6 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     duck.knative.dev/channelable: "true"
-# Do not use this role directly. These rules will be added to the "channelable-manipulator" role.
 rules:
 - apiGroups:
   - messaging.knative.dev
@@ -3644,22 +2714,7 @@ rules:
   - watch
   - update
   - patch
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3741,21 +2796,7 @@ rules:
   resources:
   - leases
   verbs: *everything
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3780,7 +2821,6 @@ rules:
   - get
   - list
   - watch
-  # Updates the status to reflect subscribable status.
 - apiGroups:
   - messaging.knative.dev
   resources:
@@ -3798,21 +2838,7 @@ rules:
   - create
   - update
   - patch
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: v1
 kind: Service
 metadata:
@@ -3831,22 +2857,7 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 8080
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -3854,21 +2865,7 @@ metadata:
   namespace: knative-eventing
   labels:
     eventing.knative.dev/release: "v0.13.3"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -3876,21 +2873,7 @@ metadata:
   namespace: knative-eventing
   labels:
     eventing.knative.dev/release: "v0.13.3"
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -3905,22 +2888,7 @@ roleRef:
   kind: ClusterRole
   name: imc-controller
   apiGroup: rbac.authorization.k8s.io
-
 ---
-# Copyright 2020 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -3935,21 +2903,7 @@ roleRef:
   kind: ClusterRole
   name: imc-dispatcher
   apiGroup: rbac.authorization.k8s.io
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3965,10 +2919,6 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
       x-kubernetes-preserve-unknown-fields: true
   names:
     kind: InMemoryChannel
@@ -4010,22 +2960,7 @@ spec:
   - name: v1beta1
     served: true
     storage: false
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4045,8 +2980,8 @@ spec:
     spec:
       serviceAccountName: imc-controller
       containers:
-      - name: controller
-        image: gcr.io/knative-releases/knative.dev/eventing/cmd/in_memory/channel_controller@sha256:68d8ea6569e3f5afbf2fabe4f897b6331cc767cc994b7279feb9128a2331bb1a
+      - name: imc-controller
+        image: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-channel-controller
         env:
         - name: CONFIG_LOGGING_NAME
           value: config-logging
@@ -4059,7 +2994,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: DISPATCHER_IMAGE
-          value: gcr.io/knative-releases/knative.dev/eventing/cmd/in_memory/channel_dispatcher@sha256:4c50fe6179dbead67a72606d771c2d64cf87e5676bac0a54e967c80ec730edaa
+          value: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-channel-dispatcher
         securityContext:
           allowPrivilegeEscalation: false
         ports:
@@ -4067,22 +3002,7 @@ spec:
           containerPort: 9090
         - name: profiling
           containerPort: 8008
-
 ---
-# Copyright 2019 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4102,8 +3022,8 @@ spec:
     spec:
       serviceAccountName: imc-dispatcher
       containers:
-      - name: dispatcher
-        image: gcr.io/knative-releases/knative.dev/eventing/cmd/in_memory/channel_dispatcher@sha256:4c50fe6179dbead67a72606d771c2d64cf87e5676bac0a54e967c80ec730edaa
+      - name: imc-dispatcher
+        image: registry.svc.ci.openshift.org/openshift/knative-v0.13.0:knative-eventing-channel-dispatcher
         env:
         - name: CONFIG_LOGGING_NAME
           value: config-logging
@@ -4119,13 +3039,10 @@ spec:
         - containerPort: 9090
           name: metrics
         resources:
-          # Set resource requests and limits based on the benchmarking results in
-          # https://github.com/knative/eventing/issues/2311#issuecomment-565311345
           requests:
             cpu: 1000m
             memory: 256Mi
           limits:
             cpu: 2200m
             memory: 2048Mi
-
 ---
