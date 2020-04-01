@@ -40,8 +40,14 @@ import (
 	"knative.dev/pkg/controller"
 )
 
+const (
+	finalizerName = "delete-knative-eventing-manifest"
+)
+
 var (
-	platform common.Platforms
+	platform    common.Platforms
+	role        mf.Predicate = mf.Any(mf.ByKind("ClusterRole"), mf.ByKind("Role"))
+	rolebinding mf.Predicate = mf.Any(mf.ByKind("ClusterRoleBinding"), mf.ByKind("RoleBinding"))
 )
 
 // Reconciler implements controller.Reconciler for Knativeeventing resources.
@@ -69,17 +75,19 @@ func (r *Reconciler) Reconcile(ctx context.Context, key string) error {
 	// Get the KnativeEventing resource with this namespace/name.
 	original, err := r.knativeEventingLister.KnativeEventings(namespace).Get(name)
 	if apierrs.IsNotFound(err) {
-		// The resource was deleted
-		r.eventings.Delete(key)
-		if r.eventings.Len() == 0 {
-			r.config.Filter(mf.NoCRDs).Delete()
-		}
 		return nil
-
 	} else if err != nil {
 		r.Logger.Error(err, "Error getting KnativeEventings")
 		return err
 	}
+
+	if original.GetDeletionTimestamp() != nil {
+		if _, ok := r.eventings[key]; ok {
+			delete(r.eventings, key)
+		}
+		return r.delete(original)
+	}
+
 	// Keep track of the number of Eventings in the cluster
 	r.eventings.Insert(key)
 
@@ -112,6 +120,7 @@ func (r *Reconciler) reconcile(ctx context.Context, ke *eventingv1alpha1.Knative
 	reqLogger.Infow("Reconciling KnativeEventing", "status", ke.Status)
 
 	stages := []func(*mf.Manifest, *eventingv1alpha1.KnativeEventing) error{
+		r.ensureFinalizer,
 		r.initStatus,
 		r.install,
 		r.checkDeployments,
@@ -120,6 +129,7 @@ func (r *Reconciler) reconcile(ctx context.Context, ke *eventingv1alpha1.Knative
 
 	manifest, err := r.transform(ke)
 	if err != nil {
+		ke.Status.MarkEventingFailed("Manifest Installation", err.Error())
 		return err
 	}
 
@@ -155,7 +165,18 @@ func (r *Reconciler) transform(instance *eventingv1alpha1.KnativeEventing) (mf.M
 func (r *Reconciler) install(manifest *mf.Manifest, ke *eventingv1alpha1.KnativeEventing) error {
 	r.Logger.Debug("Installing manifest")
 	defer r.updateStatus(ke)
-	if err := manifest.Apply(); err != nil {
+	// The Operator needs a higher level of permissions if it 'bind's non-existent roles.
+	// To avoid this, we strictly order the manifest application as (Cluster)Roles, then
+	// (Cluster)RoleBindings, then the rest of the manifest.
+	if err := manifest.Filter(role).Apply(); err != nil {
+		ke.Status.MarkEventingFailed("Manifest Installation", err.Error())
+		return err
+	}
+	if err := manifest.Filter(rolebinding).Apply(); err != nil {
+		ke.Status.MarkEventingFailed("Manifest Installation", err.Error())
+		return err
+	}
+	if err := manifest.Filter(mf.None(mf.Any(role, rolebinding))).Apply(); err != nil {
 		ke.Status.MarkEventingFailed("Manifest Installation", err.Error())
 		return err
 	}
@@ -206,6 +227,53 @@ func (r *Reconciler) updateStatus(desired *eventingv1alpha1.KnativeEventing) (*e
 	existing := ke.DeepCopy()
 	existing.Status = desired.Status
 	return r.KnativeEventingClientSet.OperatorV1alpha1().KnativeEventings(desired.Namespace).UpdateStatus(existing)
+}
+
+// ensureFinalizer attaches a "delete manifest" finalizer to the instance
+func (r *Reconciler) ensureFinalizer(manifest *mf.Manifest, instance *eventingv1alpha1.KnativeEventing) error {
+	for _, finalizer := range instance.GetFinalizers() {
+		if finalizer == finalizerName {
+			return nil
+		}
+	}
+	instance.SetFinalizers(append(instance.GetFinalizers(), finalizerName))
+	instance, err := r.KnativeEventingClientSet.OperatorV1alpha1().KnativeEventings(instance.Namespace).Update(instance)
+	return err
+}
+
+// delete all the resources in the release manifest
+func (r *Reconciler) delete(instance *eventingv1alpha1.KnativeEventing) error {
+	if len(instance.GetFinalizers()) == 0 || instance.GetFinalizers()[0] != finalizerName {
+		return nil
+	}
+	r.Logger.Info("Deleting resources")
+	var RBAC = mf.Any(role, rolebinding)
+	if len(r.eventings) == 0 {
+		// delete the deployments first
+		if err := r.config.Filter(mf.ByKind("Deployment")).Delete(); err != nil {
+			r.Logger.Warn(err, "Error deleting deployments")
+			return err
+		}
+		if err := r.config.Filter(mf.NoCRDs, mf.None(RBAC)).Delete(); err != nil {
+			r.Logger.Warn(err, "Error deleting resources")
+			return err
+		}
+		// Delete Roles last, as they may be useful for human operators to clean up.
+		if err := r.config.Filter(RBAC).Delete(); err != nil {
+			r.Logger.Warn(err, "Error deleting RBAC resources")
+			return err
+		}
+
+		r.Logger.Info("Resources are deleted")
+	}
+	// The deletionTimestamp might've changed. Fetch the resource again.
+	refetched, err := r.knativeEventingLister.KnativeEventings(instance.Namespace).Get(instance.Name)
+	if err != nil {
+		return err
+	}
+	refetched.SetFinalizers(refetched.GetFinalizers()[1:])
+	_, err = r.KnativeEventingClientSet.OperatorV1alpha1().KnativeEventings(refetched.Namespace).Update(refetched)
+	return err
 }
 
 // Delete obsolete resources from previous versions
