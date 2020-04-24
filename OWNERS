@@ -1,5 +1,4 @@
 approvers:
-- alanfx
 - jcrossley3
 - markusthoemmes
 - mgencur
@@ -9,7 +8,6 @@ approvers:
 - aliok
 - lberk
 reviewers:
-- alanfx
 - jcrossley3
 - markusthoemmes
 - mgencur
@@ -18,4 +16,3 @@ reviewers:
 - matzew
 - aliok
 - lberk
-- cardill
