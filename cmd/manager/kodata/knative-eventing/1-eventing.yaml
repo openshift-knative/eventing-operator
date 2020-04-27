@@ -2955,7 +2955,7 @@ spec:
     spec:
       serviceAccountName: eventing-controller
       containers:
-      - name: eventing-controller
+      - name: broker-controller
         terminationMessagePolicy: FallbackToLogsOnError
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-channel-broker
         resources:
@@ -3027,7 +3027,7 @@ spec:
     spec:
       serviceAccountName: eventing-controller
       containers:
-      - name: eventing-controller
+      - name: broker-controller
         terminationMessagePolicy: FallbackToLogsOnError
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-channel-broker
         resources:
@@ -3683,7 +3683,7 @@ spec:
     spec:
       serviceAccountName: eventing-controller
       containers:
-      - name: eventing-controller
+      - name: mt-broker-controller
         terminationMessagePolicy: FallbackToLogsOnError
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-mtchannel-broker
         resources:
@@ -3967,7 +3967,7 @@ spec:
     spec:
       serviceAccountName: eventing-controller
       containers:
-      - name: eventing-controller
+      - name: mt-broker-controller
         terminationMessagePolicy: FallbackToLogsOnError
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-mtchannel-broker
         resources:
@@ -4832,7 +4832,7 @@ spec:
     spec:
       serviceAccountName: imc-controller
       containers:
-      - name: controller
+      - name: imc-controller
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-channel-controller
         env:
         - name: CONFIG_LOGGING_NAME
@@ -4889,7 +4889,7 @@ spec:
     spec:
       serviceAccountName: imc-dispatcher
       containers:
-      - name: dispatcher
+      - name: imc-dispatcher
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-channel-dispatcher
         env:
         - name: CONFIG_LOGGING_NAME
