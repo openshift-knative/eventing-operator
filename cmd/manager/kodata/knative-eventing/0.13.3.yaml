@@ -803,6 +803,7 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     eventing.knative.dev/source: "true"
+    eventing.knative.dev/deprecated: "true"
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
@@ -962,6 +963,7 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     eventing.knative.dev/source: "true"
+    eventing.knative.dev/deprecated: "true"
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   name: containersources.sources.eventing.knative.dev
@@ -1085,6 +1087,7 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     eventing.knative.dev/source: "true"
+    eventing.knative.dev/deprecated: "true"
     duck.knative.dev/source: "true"
     knative.dev/crd-install: "true"
   annotations:
@@ -1224,6 +1227,7 @@ metadata:
   labels:
     eventing.knative.dev/release: "v0.13.3"
     eventing.knative.dev/source: "true"
+    eventing.knative.dev/deprecated: "true"
     duck.knative.dev/source: "true"
     duck.knative.dev/binding: "true"
     knative.dev/crd-install: "true"
