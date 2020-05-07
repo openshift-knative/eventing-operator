@@ -4895,7 +4895,7 @@ spec:
     spec:
       serviceAccountName: imc-dispatcher
       containers:
-      - name: dispatcher
+      - name: imc-dispatcher
         image: registry.svc.ci.openshift.org/openshift/knative-v0.14.0:knative-eventing-channel-dispatcher
         env:
         - name: CONFIG_LOGGING_NAME
